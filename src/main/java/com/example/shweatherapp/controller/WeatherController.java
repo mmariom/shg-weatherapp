@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,7 +22,7 @@ public class WeatherController {
 
 
     @GetMapping("locations/{id}")
-    @RateLimiter(name = "protection", fallbackMethod = "rateLimiterProtection")
+    @RateLimiter(name = "protection")
     public ResponseEntity<Object> getWeatherByLocationIdForFiveDays(@PathVariable("id") String id){
 
         return  new ResponseEntity<>(weatherService.fiveDaysTempForOneLocation(id), HttpStatus.OK);
@@ -35,7 +32,7 @@ public class WeatherController {
 
 
     @GetMapping("summary")
-    @RateLimiter(name = "protection", fallbackMethod = "rateLimiterProtection")
+    @RateLimiter(name = "protection")
     public ResponseEntity<List<Object>> getWeatherByParams(
             @RequestParam(required = false , defaultValue = "metric") String unit,
             @RequestParam(required = false,defaultValue = "0") double temperature ,
@@ -61,12 +58,13 @@ public class WeatherController {
     }
 
 
-    private ResponseEntity<Map<String,String>> rateLimiterProtection(Throwable t){
-        Map<String,String> response = new HashMap<>();
-        response.put("error","Sorry but you made many  request, please wait 10 seconds !");
 
-        return new ResponseEntity<>(response,HttpStatus.GATEWAY_TIMEOUT);
-    }
+//    private ResponseEntity<Map<String,String>> rateLimiterProtection(Throwable t){
+//        Map<String,String> response = new HashMap<>();
+//        response.put("error","Sorry but you made many  request, please wait 10 seconds !");
+//
+//        return new ResponseEntity<>(response,HttpStatus.TOO_MANY_REQUESTS);
+//    }
 
 
 
