@@ -1,0 +1,15 @@
+
+#only 1 request per 10 seconds
+
+resilience4j:
+  ratelimiter:
+    instances:
+      protection:
+        limit-for-period: 1
+        limit-refresh-period: 10s
+        timeout-duration: 0
+        register-health-indicator: true
+        event-consumer-buffer-size: 100
+
+
+
